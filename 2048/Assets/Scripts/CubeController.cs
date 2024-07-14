@@ -12,7 +12,9 @@ public class CubeController : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private TextMeshProUGUI[] cubeInfo;
     [SerializeField] private Color[] cubeColors;
-    [SerializeField] private MeshRenderer[] cubeMash;
+    [SerializeField] private Material[] cubeMaterials;
+
+
 
     private Rigidbody rb;
 
@@ -27,26 +29,20 @@ public class CubeController : MonoBehaviour
     
     private void AssignCubeColor()
     {
-        Color cubeColor = Color.white;
+        // Color cubeColor = Color.white;
+        Material cubeMaterial = null;
         int colorID = 0;
 
         for(int i = 2; i <= CubeNumber; i += i)
         {
-            if (colorID < cubeColors.Length)
+            if (colorID < cubeMaterials.Length)
             {
-                cubeColor = cubeColors[colorID];
+                cubeMaterial = cubeMaterials[colorID];
             }
-            else
-            {
-                // Логика для случая, когда CubeNumber выходит за пределы доступных цветов
-                cubeColor = Color.black;
-            }
-
+        
             colorID++;
         }
-
-        // Применяем цвет к кубу
-        GetComponent<Renderer>().material.color = cubeColor;
+        GetComponent<Renderer>().material = cubeMaterial;
     }
 
 

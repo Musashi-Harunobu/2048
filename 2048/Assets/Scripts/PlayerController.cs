@@ -1,10 +1,17 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
+    public Vector3 Direction { get; private set; }
+    
     [SerializeField] private float speed = 30f;
     [SerializeField] private float pushPower = 30f;
-    [SerializeField] private float CoolDown = 1f;
+    [SerializeField] private float coolDown = 1f;
 
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
@@ -13,7 +20,15 @@ public class PlayerController : MonoBehaviour
 
     private GameObject cube;
     private float timeToCreation = 0f;
+    
+    private Camera mainCamera;
+    
 
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+    }
+    
     private void Push()
     {
         
@@ -57,12 +72,23 @@ public class PlayerController : MonoBehaviour
         return number;
     }
 
+    private void Movement()
+    {
+        Vector3 newPosititon = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        newPosititon.x = 0f;
+        newPosititon.y = 0f;
+
+        Direction = newPosititon - transform.position;
+        float velocity = Direction.magnitude / Time.deltaTime;
+        cube.transform.position = Vector3.Lerp(pointA.position, pointB.position, velocity);
+        transform.position = newPosititon;
+    }
 
     private void FixedUpdate()
     {
         if (timeToCreation < Time.time && GameManager.IsGameOver != true)
         {
-            if (Input.touchCount > 0 && cube == null)
+            if (Input.GetMouseButton(0) && cube == null)
             {
                 // Создать новый куб
                 CreateCube();
@@ -70,24 +96,24 @@ public class PlayerController : MonoBehaviour
 
             if (cube != null)
             {
-                // Смещение объекта относительно положения пальца на экране
-                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+                // Смещение объекта относительно положения мыши на экране
+                if (Input.GetMouseButton(0))
                 {
-                    float screenWidth = Screen.width;
-
-                    float touchPosX = Input.GetTouch(0).position.x / screenWidth;
-
-                    cube.transform.position = Vector3.Lerp(pointA.position, pointB.position, touchPosX);
-
-                }
-                else if (Input.touchCount == 0)
+                    // float screenWidth = Screen.width;
+                    // float mouseX = Input.mousePosition.x / screenWidth;
+                    // cube.transform.position = Vector3.Lerp(pointA.position, pointB.position, mouseX);
+                    Vector3 screenPointA = Camera.main.WorldToScreenPoint(pointA.position);
+                    Vector3 screenPointB = Camera.main.WorldToScreenPoint(pointB.position);
+                    float limitedMouseX = Mathf.Clamp(Input.mousePosition.x, screenPointA.x, screenPointB.x);
+                    float lerpFactor = (limitedMouseX - screenPointA.x) / (screenPointB.x - screenPointA.x);
+                    cube.transform.position = Vector3.Lerp(pointA.position, pointB.position, lerpFactor); }
+                else if (!Input.GetMouseButton(0))
                 {
                     // Толкнуть куб вперед
                     Push();
-
-                    timeToCreation = Time.time + CoolDown;
+                    timeToCreation = Time.time + coolDown;
                 }
             }
         }
     }
-}    
+}
