@@ -7,13 +7,19 @@ public class ScreenInformation : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI CurrentGameScoreInfo;
     [SerializeField] private TextMeshProUGUI RecordGameScoreInfo;
-    [SerializeField] private TextMeshProUGUI HighestNumberOnCubeInfo;
+
+    
+    [SerializeField] private GameObject GameOverWindow;
 
     private void FixedUpdate()
     {
-        CurrentGameScoreInfo.text = $"{GameManager.CurrentGameScore}";
-        RecordGameScoreInfo.text = $"{GameManager.RecordGameScore}";
-        HighestNumberOnCubeInfo.text = $"{GameManager.HighestNumberOnCube}";
+        CurrentGameScoreInfo.text = $"Счет: {GameManager.CurrentGameScore}";
+        RecordGameScoreInfo.text = $"Лучший счет: {GameManager.RecordGameScore}";
+        
+        if (GameManager.IsGameOver == true &&  GameOverWindow.activeSelf == false)
+        {
+            GameOverWindow.SetActive(true);
+        }
     }
 
 }

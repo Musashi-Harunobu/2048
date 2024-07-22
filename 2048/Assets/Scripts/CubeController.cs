@@ -11,11 +11,8 @@ public class CubeController : MonoBehaviour
 
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private TextMeshProUGUI[] cubeInfo;
-    [SerializeField] private Color[] cubeColors;
     [SerializeField] private Material[] cubeMaterials;
-
-
-
+    
     private Rigidbody rb;
 
     private void Awake()
@@ -24,10 +21,10 @@ public class CubeController : MonoBehaviour
 
         UpdateInformation();
         
-        AssignCubeColor();
+        AssignCubeMaterial();
     }
     
-    private void AssignCubeColor()
+    private void AssignCubeMaterial()
     {
         // Color cubeColor = Color.white;
         Material cubeMaterial = null;
@@ -56,7 +53,7 @@ public class CubeController : MonoBehaviour
         {
             GameManager.HighestNumberOnCube = CubeNumber;
         }
-        AssignCubeColor();
+        AssignCubeMaterial();
     }
 
     private void OnCollisionEnter(Collision collision)
