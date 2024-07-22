@@ -19,8 +19,9 @@ public class GameManager : MonoBehaviour
         CurrentGameScore = 0;
 
         HighestNumberOnCube = 0;
+
         // Найти все кубики на сцене
-        CubeController[] cubes = FindObjectsOfType<CubeController>();
+        CubeController[] cubes = GameObject.FindObjectsOfType<CubeController>();
 
         // Поиск наибольшего значения среди кубиков
         for (int i = 0; i < cubes.Length; i++)
@@ -30,15 +31,18 @@ public class GameManager : MonoBehaviour
                 HighestNumberOnCube = cubes[i].CubeNumber;
             }
         }
+
     }
 
     public static void UpdateScore(int score)
     {
+        // Обновляем игровой счет
         CurrentGameScore += score;
 
         if (RecordGameScore < CurrentGameScore)
         {
-            CurrentGameScore = RecordGameScore;
+            RecordGameScore = CurrentGameScore;
         }
+
     }
 }

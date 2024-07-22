@@ -67,6 +67,11 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < rnd; i++)
         {
             number += number;
+            if (number > 8)
+            {
+                number = 2;
+            }
+            
         }
 
         return number;
