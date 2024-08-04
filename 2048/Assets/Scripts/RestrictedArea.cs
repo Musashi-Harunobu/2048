@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YG;
 
 public class RestrictedArea : MonoBehaviour
 {
     public static int Countdown = 0;
 
-    [SerializeField] private int countdownToLoss = 3;
+    [SerializeField] private int countdownToLoss = 1;
 
     private GameObject newCube;
+    
 
     IEnumerator GameOverTime()
     {
@@ -22,12 +24,18 @@ public class RestrictedArea : MonoBehaviour
         }
 
         GameManager.IsGameOver = true;
-
+        
+        
         // Остановить все корутины
         StopAllCoroutines();
     }
-
-
+    
+    IEnumerator DestroyAfterDelay(GameObject cube)
+    {
+        yield return new WaitForSeconds(0.5f); // Задержка перед уничтожением
+        Destroy(cube);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("NewCube"))
@@ -49,6 +57,7 @@ public class RestrictedArea : MonoBehaviour
             if (Countdown == 0)
             {
                 StartCoroutine(GameOverTime());
+                StartCoroutine(DestroyAfterDelay(other.gameObject)); // Запуск корутины с задержкой
             }
         }
     }

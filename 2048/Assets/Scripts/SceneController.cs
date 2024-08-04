@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using YG;
 
 
 public class SceneController : MonoBehaviour
@@ -10,9 +11,11 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene");
         GameManager.IsGameOver = false;
+        YandexGame.FullscreenShow();
     }
     public static void MenuScene()
     {
         SceneManager.LoadScene("MainMenu");
     }
+    
 }

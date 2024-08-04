@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using YG;
 
 public class ScreenInformation : MonoBehaviour
 {
@@ -20,6 +21,13 @@ public class ScreenInformation : MonoBehaviour
         {
             GameOverWindow.SetActive(true);
         }
+    }
+
+    public void ContinueGame()
+    {
+        YandexGame.RewVideoShow(1);
+        GameManager.IsGameOver = false;
+        GameOverWindow.SetActive(false);
     }
 
 }
